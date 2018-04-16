@@ -148,7 +148,6 @@ void ATheEndlessTravelCharacter::StopJumping()
 void ATheEndlessTravelCharacter::Jump()
 {
 	this->IsJumping = true;
-	PRINT_LOG("Jump");
 	Super::Jump();
 }
 
@@ -157,15 +156,16 @@ void ATheEndlessTravelCharacter::Jump()
 void ATheEndlessTravelCharacter::StopFiring()
 {
 	this->IsFiring = false;
-	PRINT_LOG("StopFiring");
 	CurrentWeapon->StopFire();
 }
 
 void ATheEndlessTravelCharacter::StartFiring()
 {
 	this->IsFiring = true;
-	PRINT_LOG("StartFiring");
-	CurrentWeapon->StartFire();
+	if (!IsDead)
+	{
+		CurrentWeapon->StartFire();
+	}
 }
 
 void ATheEndlessTravelCharacter::Death()
@@ -182,6 +182,8 @@ void ATheEndlessTravelCharacter::Death()
 	this->GetMesh()->SetVisibility(false, true);
 	
 	GetWorldTimerManager().SetTimer(TimerHandle_RespawnTimer, this, &ATheEndlessTravelCharacter::Respawn, CooldownDuration);
+
+	this->StopFiring();
 }
 
 
