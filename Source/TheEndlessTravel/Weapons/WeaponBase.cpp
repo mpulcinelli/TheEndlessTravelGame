@@ -6,6 +6,7 @@
 #include <Components/SkeletalMeshComponent.h>
 #include "ProjectileBase.h"
 #include <ConstructorHelpers.h>
+#include <Particles/ParticleSystemComponent.h>
 
 
 // Sets default values
@@ -23,6 +24,12 @@ AWeaponBase::AWeaponBase()
 	}
 
 	RootComponent = MeshComp;
+	
+	MuzzleParticleEffect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("MuzzleParticleEffect"));
+	if (!ensure(MuzzleParticleEffect != nullptr)) return;
+	MuzzleParticleEffect->SetupAttachment(RootComponent);
+	MuzzleParticleEffect->Activate(false);
+
 	MuzzleSocketName = "MuzzleSocket";
 
 	RateOfFire = 600;
@@ -33,6 +40,11 @@ AWeaponBase::AWeaponBase()
 void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
+	FVector SocketLocation = MeshComp->GetSocketLocation(MuzzleSocketName);
+	FRotator SocketRotation = MeshComp->GetSocketRotation(MuzzleSocketName);
+
+	MuzzleParticleEffect->SetRelativeLocation(SocketLocation);
+	MuzzleParticleEffect->SetRelativeRotation(SocketRotation);
 
 	TimeBetweenShots = 60 / RateOfFire;
 
@@ -51,6 +63,7 @@ void AWeaponBase::Fire()
 	FRotator SpawnRotation = MeshComp->GetSocketRotation(MuzzleSocketName);
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	MuzzleParticleEffect->Activate(true);
 	GetWorld()->SpawnActor<AProjectileBase>(ProjectileWeapon, SpawnPosition, SpawnRotation, SpawnParams);
 }
 

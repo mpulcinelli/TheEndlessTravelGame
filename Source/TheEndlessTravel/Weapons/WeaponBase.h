@@ -31,6 +31,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	class TSubclassOf<class AProjectileBase> ProjectileWeapon;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class UParticleSystemComponent* MuzzleParticleEffect;
+
+
 
 	FTimerHandle TimerHandle_TimeBetweemShots;
 
