@@ -15,7 +15,10 @@ bool UHUDControllers::Initialize()
 	if (!ensure(TheEndlessTravelCharacte != nullptr)) return false;
 
 	if (!ensure(JumpButton != nullptr)) return false; 
-	JumpButton->OnClicked.AddDynamic(this, &UHUDControllers::OnJump);
+	JumpButton->OnClicked.AddDynamic(this, &UHUDControllers::OnJumpStart);
+	JumpButton->OnReleased.AddDynamic(this, &UHUDControllers::OnJumpEnd);
+
+	
 
 	if (!ensure(CoinColletedText != nullptr)) return false;
 
@@ -86,11 +89,19 @@ void UHUDControllers::CountDownTick(float valor)
 	}
 }
 
-void UHUDControllers::OnJump()
+void UHUDControllers::OnJumpStart()
 {
 	if (!ensure(TheEndlessTravelCharacte != nullptr)) return;
 
 	TheEndlessTravelCharacte->Jump();
+
+}
+
+void UHUDControllers::OnJumpEnd()
+{
+	if (!ensure(TheEndlessTravelCharacte != nullptr)) return;
+
+	TheEndlessTravelCharacte->StopJumping();
 
 }
 

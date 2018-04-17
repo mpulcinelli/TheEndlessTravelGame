@@ -47,7 +47,9 @@ protected:
 	void CountDownTick(float valor);
 
 	UFUNCTION()
-	void OnJump();
+	void OnJumpStart();
 
+	UFUNCTION()
+	void OnJumpEnd();
 
 };
