@@ -113,8 +113,6 @@ void ATheEndlessTravelCharacter::SetupPlayerInputComponent(class UInputComponent
 
 
 	PlayerInputComponent->BindAxis("MoveRight", this, &ATheEndlessTravelCharacter::MoveRight);
-	//PlayerInputComponent->BindAxis("MoveForward", this, &ATheEndlessTravelCharacter::MoveForward);
-	
 }
 
 void ATheEndlessTravelCharacter::Respawn()
