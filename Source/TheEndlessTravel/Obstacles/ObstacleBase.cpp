@@ -2,6 +2,9 @@
 #include "ObstacleBase.h"
 #include <Components/StaticMeshComponent.h>
 #include "TheEndlessTravelCharacter.h"
+#include <../Plugins/Runtime/ApexDestruction/Source/ApexDestruction/Public/DestructibleComponent.h>
+#include "Weapons/ProjectileBase.h"
+
 
 
 // Sets default values
@@ -9,13 +12,23 @@ AObstacleBase::AObstacleBase()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	ObstacleMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ObstacleMeshComponent"));
 	
-	if (ObstacleMeshComponent != nullptr) 
+
+	DestructibleObstacle=CreateDefaultSubobject<UDestructibleComponent>(TEXT("DestructibleObstacle"));
+
+	if (DestructibleObstacle != nullptr)
 	{
-		ObstacleMeshComponent->SetNotifyRigidBodyCollision(true);
-		RootComponent = ObstacleMeshComponent;
+		DestructibleObstacle->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		DestructibleObstacle->SetSimulatePhysics(true);
+		DestructibleObstacle->SetEnableGravity(false);
+		DestructibleObstacle->WakeRigidBody(NAME_None);
+
+		RootComponent = DestructibleObstacle;
+		//DestructibleObstacle->SetupAttachment(RootComponent);
 	}
+
+	
+
 }
 
 // Called when the game starts or when spawned
@@ -23,9 +36,11 @@ void AObstacleBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	if (ObstacleMeshComponent != nullptr)
+	if (DestructibleObstacle != nullptr)
 	{
-		ObstacleMeshComponent->OnComponentHit.AddDynamic(this, &AObstacleBase::OnObstacleMeshHit);
+		DestructibleObstacle->SetNotifyRigidBodyCollision(true);
+
+		DestructibleObstacle->OnComponentHit.AddDynamic(this, &AObstacleBase::OnObstacleMeshHit);
 	}
 
 	this->OnDestroyed.AddDynamic(this, &AObstacleBase::OnDestroyedMe);
@@ -38,6 +53,10 @@ void AObstacleBase::OnDestroyedMe(AActor* OtherActor)
 }
 
 
+void AObstacleBase::ApplyFracture()
+{
+}
+
 void AObstacleBase::OnObstacleMeshHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 
@@ -49,6 +68,15 @@ void AObstacleBase::OnObstacleMeshHit(UPrimitiveComponent* HitComponent, AActor*
 	{
 		MyPlayer->Death();
 	}
+
+	AProjectileBase* Projectile = Cast<AProjectileBase>(OtherActor);
+
+	if (Projectile!=nullptr) {
+		
+		DestructibleObstacle->ApplyRadiusDamage(5000, Hit.Location, 100, 10000, false);
+		SetLifeSpan(1);
+	}
+
 }
 
 // Called every frame

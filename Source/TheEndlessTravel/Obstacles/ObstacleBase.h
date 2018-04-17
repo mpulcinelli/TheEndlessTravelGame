@@ -20,7 +20,8 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere)
-	class UStaticMeshComponent* ObstacleMeshComponent;
+	class UDestructibleComponent* DestructibleObstacle;
+
 
 	UFUNCTION()
 	void OnObstacleMeshHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
@@ -28,10 +29,13 @@ protected:
 	UFUNCTION()
 	void OnDestroyedMe(AActor* OtherActor);
 
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	
+	UFUNCTION()
+	void ApplyFracture();
+
 	
 };
