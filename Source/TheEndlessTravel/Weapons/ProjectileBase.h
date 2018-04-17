@@ -31,4 +31,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	class UProjectileMovementComponent* ProjectileMoviment;
 
+	UFUNCTION()
+	void OnSphereCollisionHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
 };

@@ -5,6 +5,8 @@
 #include <Components/StaticMeshComponent.h>
 #include <Particles/ParticleSystemComponent.h>
 #include <GameFramework/ProjectileMovementComponent.h>
+#include "GameHelpers/GameMacros.h"
+#include "Obstacles/ObstacleBase.h"
 
 
 // Sets default values
@@ -31,8 +33,8 @@ AProjectileBase::AProjectileBase()
 	if (!ensure(ProjectileMoviment != nullptr)) return;
 	
 	ProjectileMoviment->UpdatedComponent = RootComponent;
-	ProjectileMoviment->InitialSpeed =5000.0f;
-	ProjectileMoviment->MaxSpeed = 5000.0f;
+	ProjectileMoviment->InitialSpeed =10000.0f;
+	ProjectileMoviment->MaxSpeed = 10000.0f;
 	ProjectileMoviment->bRotationFollowsVelocity = true;
 	ProjectileMoviment->bShouldBounce = false;
 }
@@ -41,6 +43,24 @@ AProjectileBase::AProjectileBase()
 void AProjectileBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if (SphereCollision != nullptr)
+	{
+		SphereCollision->SetNotifyRigidBodyCollision(true);
+
+		SphereCollision->OnComponentHit.AddDynamic(this, &AProjectileBase::OnSphereCollisionHit);
+	}
+}
+
+void AProjectileBase::OnSphereCollisionHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	AObstacleBase* Obstacle = Cast<AObstacleBase>(OtherActor);
+
+	if (Obstacle != nullptr) {
+		Obstacle->ApplyFracture();
+		Obstacle->SetLifeSpan(10.0f);
+	}
+
+	Destroy();
 }
 
