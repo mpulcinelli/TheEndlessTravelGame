@@ -11,10 +11,10 @@ AFloorTileTurnRight::AFloorTileTurnRight()
 {
 	BoxEnableCanTurn = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxEnableCanTurn"));
 	ArrowDirecao = CreateDefaultSubobject<UDecalComponent>(TEXT("ArrowDirecao"));
-	if(BoxEnableCanTurn!=NULL)
+	if(BoxEnableCanTurn!=nullptr)
 		BoxEnableCanTurn->SetupAttachment(RootComponent);
 
-	if(ArrowDirecao!=NULL)
+	if(ArrowDirecao!=nullptr)
 		ArrowDirecao->SetupAttachment(RootComponent);
 }
 
@@ -22,7 +22,7 @@ void AFloorTileTurnRight::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (BoxEnableCanTurn != NULL)
+	if (BoxEnableCanTurn != nullptr)
 	{
 		BoxEnableCanTurn->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 		BoxEnableCanTurn->SetCollisionResponseToAllChannels(ECR_Ignore);
@@ -48,7 +48,7 @@ void AFloorTileTurnRight::OnBoxEnableCanTurnBeginOverlap(UPrimitiveComponent* Ov
 
 	ATheEndlessTravelCharacter* MyPlayer = Cast<ATheEndlessTravelCharacter>(OtherActor);
 
-	if (MyPlayer != NULL)
+	if (MyPlayer != nullptr)
 	{
 		MyPlayer->CanTurn = true;
 	}

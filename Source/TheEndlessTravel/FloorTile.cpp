@@ -12,6 +12,7 @@
 #include <Box.h>
 #include "Pickups/PickupBase.h"
 #include <Engine/EngineTypes.h>
+#include "GameHelpers/GameMacros.h"
 
 // Sets default values
 AFloorTile::AFloorTile()

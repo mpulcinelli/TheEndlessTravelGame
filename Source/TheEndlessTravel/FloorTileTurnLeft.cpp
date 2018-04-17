@@ -5,6 +5,7 @@
 #include <Components/BoxComponent.h>
 #include "TheEndlessTravelCharacter.h"
 #include <Components/DecalComponent.h>
+#include "GameHelpers/GameMacros.h"
 
 
 // Sets default values
@@ -56,6 +57,8 @@ void AFloorTileTurnLeft::OnBoxEnableCanTurnBeginOverlap(UPrimitiveComponent* Ove
 
 	if (MyPlayer != nullptr)
 	{
+		PRINT_LOG("CAN TURN NOW!!!");
+
 		MyPlayer->CanTurn = true;
 	}
 }
