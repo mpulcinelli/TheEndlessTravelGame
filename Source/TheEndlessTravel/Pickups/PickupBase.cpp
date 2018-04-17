@@ -20,17 +20,17 @@ APickupBase::APickupBase()
 	PickUpRotationComponent = CreateDefaultSubobject<URotatingMovementComponent>(TEXT("PickUpRotationComponent"));
 	//BasePickup = CreateDefaultSubobject<UDecalComponent>(TEXT("BasePickup"));
 
-	if (PickUpSceneComponent != NULL)
+	if (PickUpSceneComponent != nullptr)
 		RootComponent = PickUpSceneComponent;
 
-	if(PickUpMeshComponent!=NULL)
+	if(PickUpMeshComponent!= nullptr)
 		PickUpMeshComponent->SetupAttachment(RootComponent);
 	
-	if(PickUpPointLightComponent!=NULL)
+	if(PickUpPointLightComponent!= nullptr)
 		PickUpPointLightComponent->SetupAttachment(RootComponent);
 	
 	//BasePickup->SetupAttachment(RootComponent);
-	if(PickUpRotationComponent!=NULL)
+	if(PickUpRotationComponent!= nullptr)
 		PickUpRotationComponent->SetUpdatedComponent(RootComponent);
 	
 	PickupValue = 10;
@@ -41,10 +41,10 @@ APickupBase::APickupBase()
 void APickupBase::BeginPlay()
 {
 	Super::BeginPlay();
-	if(PickUpSceneComponent!=NULL)
+	if(PickUpSceneComponent!= nullptr)
 		PickUpSceneComponent->SetMobility(EComponentMobility::Movable);
 	
-	if (PickUpMeshComponent!=NULL)
+	if (PickUpMeshComponent!= nullptr)
 	{
 		PickUpMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 		PickUpMeshComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
@@ -57,7 +57,7 @@ void APickupBase::BeginPlay()
 
 void APickupBase::OnPickUpMeshComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	if (SoundCollision != NULL)
+	if (SoundCollision != nullptr)
 	{
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), SoundCollision, GetActorLocation());
 	}
