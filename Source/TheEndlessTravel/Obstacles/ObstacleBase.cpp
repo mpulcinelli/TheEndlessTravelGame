@@ -67,6 +67,9 @@ void AObstacleBase::OnObstacleMeshHit(UPrimitiveComponent* HitComponent, AActor*
 	if (MyPlayer != nullptr && !MyPlayer->IsDead)
 	{
 		MyPlayer->Death();
+		DestructibleObstacle->ApplyRadiusDamage(5000, Hit.Location, 100, 10000, false);
+		SetLifeSpan(1);
+
 	}
 
 	AProjectileBase* Projectile = Cast<AProjectileBase>(OtherActor);
