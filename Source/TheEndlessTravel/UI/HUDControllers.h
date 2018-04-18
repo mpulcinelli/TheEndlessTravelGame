@@ -33,11 +33,19 @@ protected:
 	class UButton* JumpButton;
 
 	UPROPERTY(Meta = (BindWidget))
+	class UButton* FireButton;
+
+
+	UPROPERTY(Meta = (BindWidget))
 	class UTextBlock* CoinColletedText;
 
 	UPROPERTY(Meta = (BindWidget))
 	class UTextBlock* CountDownToStartText;
-	
+
+	UPROPERTY(Meta = (BindWidget))
+	class UTextBlock* CountMetersRunText;
+
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UWidgetAnimation* AnimationCountDownIn; 
 
@@ -47,9 +55,20 @@ protected:
 	void CountDownTick(float valor);
 
 	UFUNCTION()
+	void CountMetersRun(float valor);
+
+
+	UFUNCTION()
 	void OnJumpStart();
 
 	UFUNCTION()
 	void OnJumpEnd();
+
+	UFUNCTION()
+	void OnFireStart();
+
+	UFUNCTION()
+	void OnFireEnd();
+
 
 };

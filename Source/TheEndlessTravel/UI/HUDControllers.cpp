@@ -5,6 +5,7 @@
 #include "TheEndlessTravelCharacter.h"
 #include <Kismet/GameplayStatics.h>
 #include "TheEndlessTravelGameMode.h"
+#include "GameHelpers/GameMacros.h"
 
 bool UHUDControllers::Initialize()
 {
@@ -15,10 +16,15 @@ bool UHUDControllers::Initialize()
 	if (!ensure(TheEndlessTravelCharacte != nullptr)) return false;
 
 	if (!ensure(JumpButton != nullptr)) return false; 
-	JumpButton->OnClicked.AddDynamic(this, &UHUDControllers::OnJumpStart);
+	
+	JumpButton->OnPressed.AddDynamic(this, &UHUDControllers::OnJumpStart);
 	JumpButton->OnReleased.AddDynamic(this, &UHUDControllers::OnJumpEnd);
 
-	
+	if (!ensure(FireButton != nullptr)) return false;
+
+	FireButton->OnPressed.AddDynamic(this, &UHUDControllers::OnFireStart);
+	FireButton->OnReleased.AddDynamic(this, &UHUDControllers::OnFireEnd);
+
 
 	if (!ensure(CoinColletedText != nullptr)) return false;
 
@@ -26,6 +32,7 @@ bool UHUDControllers::Initialize()
 	if (!ensure(TheEndlessTravelGameMode != nullptr)) return false;
 
 	TheEndlessTravelGameMode->OnCountDownToStart.AddDynamic(this, &UHUDControllers::CountDownTick);
+	TheEndlessTravelGameMode->OnCountMetersRun.AddDynamic(this, &UHUDControllers::CountMetersRun);
 	 
 	return true;
 }
@@ -89,12 +96,17 @@ void UHUDControllers::CountDownTick(float valor)
 	}
 }
 
+void UHUDControllers::CountMetersRun(float valor)
+{
+	CountMetersRunText->SetText(FText::AsNumber(valor));
+}
+
 void UHUDControllers::OnJumpStart()
 {
 	if (!ensure(TheEndlessTravelCharacte != nullptr)) return;
 
 	TheEndlessTravelCharacte->Jump();
-
+	PRINT_LOG("UHUDControllers::OnJumpStart");
 }
 
 void UHUDControllers::OnJumpEnd()
@@ -102,6 +114,16 @@ void UHUDControllers::OnJumpEnd()
 	if (!ensure(TheEndlessTravelCharacte != nullptr)) return;
 
 	TheEndlessTravelCharacte->StopJumping();
+	PRINT_LOG("UHUDControllers::OnJumpStart");
+}
 
+void UHUDControllers::OnFireStart()
+{
+	TheEndlessTravelCharacte->StartFiring();
+}
+
+void UHUDControllers::OnFireEnd()
+{
+	TheEndlessTravelCharacte->StopFiring();
 }
 
