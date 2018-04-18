@@ -17,6 +17,7 @@ ATheEndlessTravelGameMode::ATheEndlessTravelGameMode()
 	CountForwardTile = 0;
 	CountDownToStart = 5;
 	CoinCollected = 0.0f;
+	MetersIncremented = 0.0f;
 
 	static ConstructorHelpers::FClassFinder<AFloorTile> BP_FloorTile(TEXT("/Game/Blueprints/BP_FloorTile"));
 	if (BP_FloorTile.Class != nullptr)
@@ -216,13 +217,15 @@ void ATheEndlessTravelGameMode::SpawnForwardTile()
 void ATheEndlessTravelGameMode::StartPlayerRunning()
 {
 	if (CountDownToStart <= 0) {
-		ATheEndlessTravelCharacter* ItsMe = Cast<ATheEndlessTravelCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-		if (ItsMe != nullptr)
+		
+		if (MyCharacter != nullptr)
 		{
-			ItsMe->StartRunning();
-
-			GetWorldTimerManager().ClearTimer(TimerHandle_StartPlaying);
+			MyCharacter->StartRunning();
 		}
+
+		GetWorldTimerManager().ClearTimer(TimerHandle_StartPlaying);
+
+		GetWorldTimerManager().SetTimer(TimerHandle_CountMetersRun, this, &ATheEndlessTravelGameMode::CountMetersRun, 0.1, true);
 	}
 
 	OnCountDownToStart.Broadcast(CountDownToStart);
@@ -267,9 +270,19 @@ void ATheEndlessTravelGameMode::PlayAudioForRunningPlay()
 	PRINT_LOG("ATheEndlessTravelGameMode::PlayAudioForRunningPlay");
 }
 
+void ATheEndlessTravelGameMode::CountMetersRun()
+{
+	if (!MyCharacter->IsDead) {
+		MetersIncremented++;
+		OnCountMetersRun.Broadcast(MetersIncremented);
+	}
+}
+
 void ATheEndlessTravelGameMode::BeginPlay()
 {
 	Super::BeginPlay();
+
+	MyCharacter = Cast<ATheEndlessTravelCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
 	GetWorldTimerManager().SetTimer(TimerHandle_StartPlaying, this, &ATheEndlessTravelGameMode::StartPlayerRunning, 1, true);
 	for (int i =0 ;i<10;i++)

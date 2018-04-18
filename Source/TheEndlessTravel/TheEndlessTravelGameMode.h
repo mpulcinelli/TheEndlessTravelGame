@@ -7,7 +7,7 @@
 #include "TheEndlessTravelGameMode.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCountDownToStart, float, CountDownToStart);
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCountMetersRun, float, MetersRun);
 
 
 UCLASS(minimalapi)
@@ -20,6 +20,8 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "EventDispatchers")
 	FOnCountDownToStart OnCountDownToStart;
 
+	UPROPERTY(BlueprintAssignable, Category = "EventDispatchers")
+	FOnCountMetersRun OnCountMetersRun;
 
 protected:
 	
@@ -49,9 +51,14 @@ protected:
 
 	TSubclassOf<class USoundBase> SoundBaseForCountDownIn;
 
+	class ATheEndlessTravelCharacter* MyCharacter;
+
 	FTimerHandle TimerHandle_StartPlaying;
+	FTimerHandle TimerHandle_CountMetersRun;
 
 	float CoinCollected;
+
+	float MetersIncremented;
 
 public:
 	ATheEndlessTravelGameMode();
@@ -82,6 +89,7 @@ public:
 
 	void PlayAudioForRunningPlay();
 
+	void CountMetersRun();
 };
 
 
