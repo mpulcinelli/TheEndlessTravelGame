@@ -4,10 +4,10 @@
 #include "TheEndlessTravelCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Engine/World.h"
-#include "FloorTileRamp.h"
-#include "FloorTileRampDown.h"
-#include "FloorTileTurnRight.h"
-#include "FloorTileTurnLeft.h"
+#include "Buildings/FloorTileRamp.h"
+#include "Buildings/FloorTileRampDown.h"
+#include "Buildings/FloorTileTurnRight.h"
+#include "Buildings/FloorTileTurnLeft.h"
 #include <TimerManager.h>
 #include <Kismet/GameplayStatics.h>
 #include "GameHelpers/GameMacros.h"

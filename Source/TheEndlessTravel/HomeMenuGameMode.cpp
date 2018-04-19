@@ -1,5 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-#include "FloorTile.h"
+#include "Buildings/FloorTile.h"
 #include "HomeMenuGameMode.h"
 #include <GameFramework/PlayerController.h>
 #include <Engine/World.h>
