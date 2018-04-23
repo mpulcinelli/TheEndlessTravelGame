@@ -22,6 +22,12 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	class UDestructibleComponent* DestructibleObstacle;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UParticleSystem* ParticleForObstacleHitEffect;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class UParticleSystemComponent* ParticleSystemCompForHit;
+
 
 	UFUNCTION()
 	void OnObstacleMeshHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);

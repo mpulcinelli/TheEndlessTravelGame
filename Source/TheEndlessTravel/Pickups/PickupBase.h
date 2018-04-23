@@ -35,6 +35,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USoundBase* SoundCollision;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UParticleSystem* ParticleForPickupEffect;
+
+
 	UPROPERTY(VisibleAnywhere)
 	class UDecalComponent* BasePickup;
 

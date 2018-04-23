@@ -4,6 +4,8 @@
 #include "TheEndlessTravelCharacter.h"
 #include <../Plugins/Runtime/ApexDestruction/Source/ApexDestruction/Public/DestructibleComponent.h>
 #include "Weapons/ProjectileBase.h"
+#include "GameHelpers/GameMacros.h"
+#include <Particles/ParticleSystemComponent.h>
 
 
 
@@ -24,9 +26,15 @@ AObstacleBase::AObstacleBase()
 		DestructibleObstacle->WakeRigidBody(NAME_None);
 
 		RootComponent = DestructibleObstacle;
-		//DestructibleObstacle->SetupAttachment(RootComponent);
 	}
 
+	ParticleSystemCompForHit = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ParticleSystemCompForHit"));
+	
+	if (ParticleSystemCompForHit != nullptr)
+	{
+		ParticleSystemCompForHit->SetAutoActivate(false);
+		ParticleSystemCompForHit->SetupAttachment(RootComponent);
+	}
 	
 
 }
@@ -41,6 +49,12 @@ void AObstacleBase::BeginPlay()
 		DestructibleObstacle->SetNotifyRigidBodyCollision(true);
 
 		DestructibleObstacle->OnComponentHit.AddDynamic(this, &AObstacleBase::OnObstacleMeshHit);
+	}
+
+	if (ParticleForObstacleHitEffect != nullptr) 
+	{
+		ParticleSystemCompForHit->SetAutoActivate(false);
+		ParticleSystemCompForHit->SetTemplate(ParticleForObstacleHitEffect);
 	}
 
 	this->OnDestroyed.AddDynamic(this, &AObstacleBase::OnDestroyedMe);
@@ -60,7 +74,7 @@ void AObstacleBase::ApplyFracture()
 void AObstacleBase::OnObstacleMeshHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 
-	UE_LOG(LogTemp, Warning, TEXT("BATEU OnObstacleMeshHit"));
+	if (OtherActor == nullptr)return;
 
 	ATheEndlessTravelCharacter* MyPlayer = Cast<ATheEndlessTravelCharacter>(OtherActor);
 	
@@ -68,8 +82,8 @@ void AObstacleBase::OnObstacleMeshHit(UPrimitiveComponent* HitComponent, AActor*
 	{
 		MyPlayer->Death();
 		DestructibleObstacle->ApplyRadiusDamage(5000, Hit.Location, 100, 10000, false);
+		ParticleSystemCompForHit->Activate(true);
 		SetLifeSpan(1);
-
 	}
 
 	AProjectileBase* Projectile = Cast<AProjectileBase>(OtherActor);
@@ -77,9 +91,9 @@ void AObstacleBase::OnObstacleMeshHit(UPrimitiveComponent* HitComponent, AActor*
 	if (Projectile!=nullptr) {
 		
 		DestructibleObstacle->ApplyRadiusDamage(5000, Hit.Location, 100, 10000, false);
+		ParticleSystemCompForHit->Activate(true);
 		SetLifeSpan(1);
 	}
-
 }
 
 // Called every frame

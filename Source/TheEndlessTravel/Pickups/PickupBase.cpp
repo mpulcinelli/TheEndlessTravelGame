@@ -7,6 +7,10 @@
 #include <Sound/SoundBase.h>
 #include <Kismet/GameplayStatics.h>
 #include <Components/DecalComponent.h>
+#include <Particles/ParticleSystem.h>
+#include "GameHelpers/GameMacros.h"
+#include <Particles/ParticleSystemComponent.h>
+#include <Engine/World.h>
 
 // Sets default values
 APickupBase::APickupBase()
@@ -57,11 +61,26 @@ void APickupBase::BeginPlay()
 
 void APickupBase::OnPickUpMeshComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
+	FVector MyLocation = GetActorLocation();
+	FRotator MyRotation = GetActorRotation();
+	FVector MyScale = FVector(1, 1, 1);
+	UWorld* const MyWorld = GetWorld();
+
 	if (SoundCollision != nullptr)
 	{
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), SoundCollision, GetActorLocation());
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), SoundCollision, MyLocation);
 	}
-	
+	if (ParticleForPickupEffect != nullptr)
+	{
+
+		UParticleSystemComponent* MyParticle = UGameplayStatics::SpawnEmitterAtLocation(MyWorld , ParticleForPickupEffect, MyLocation, MyRotation, MyScale, true);
+
+		if (MyParticle != nullptr) {
+			
+			PRINT_LOG_2("%s", *MyParticle->GetName());
+		}
+	}
+
 	Destroy();
 }
 
