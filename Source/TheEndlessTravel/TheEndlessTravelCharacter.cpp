@@ -143,6 +143,16 @@ void ATheEndlessTravelCharacter::StopJumping()
 	Super::StopJumping();
 }
 
+bool ATheEndlessTravelCharacter::IsMoving()
+{
+
+	float walkSpeed = FVector::DotProduct(GetVelocity(), GetActorRotation().Vector());
+
+	PRINT_LOG_2("Walk Speed: %s", *FString::SanitizeFloat(walkSpeed));
+
+	return walkSpeed > 0.0f;
+}
+
 void ATheEndlessTravelCharacter::Jump()
 {
 	this->IsJumping = true;

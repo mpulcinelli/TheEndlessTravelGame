@@ -272,7 +272,7 @@ void ATheEndlessTravelGameMode::PlayAudioForRunningPlay()
 
 void ATheEndlessTravelGameMode::CountMetersRun()
 {
-	if (!MyCharacter->IsDead) {
+	if (!MyCharacter->IsDead && MyCharacter->IsMoving()) {
 		MetersIncremented++;
 		OnCountMetersRun.Broadcast(MetersIncremented);
 	}

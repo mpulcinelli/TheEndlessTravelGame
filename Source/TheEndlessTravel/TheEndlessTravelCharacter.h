@@ -105,6 +105,8 @@ public:
 	void Jump();
 	void StopJumping();
 
+	bool IsMoving();
+
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	bool IsFiring;
 	
