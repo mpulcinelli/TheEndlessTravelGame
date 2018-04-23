@@ -11,7 +11,7 @@ AFloorTileRamp::AFloorTileRamp()
 {
 	RampMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RampMeshComponent"));
 
-	if(RampMeshComponent!=NULL)
+	if(RampMeshComponent!=nullptr)
 		RampMeshComponent->SetupAttachment(RootComponent);
 }
 

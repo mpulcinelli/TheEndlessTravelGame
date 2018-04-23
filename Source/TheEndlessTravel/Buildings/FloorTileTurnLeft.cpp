@@ -17,10 +17,10 @@ AFloorTileTurnLeft::AFloorTileTurnLeft()
 	BoxEnableCanTurn = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxEnableCanTurn"));
 	ArrowDirecao = CreateDefaultSubobject<UDecalComponent>(TEXT("ArrowDirecao"));
 
-	if (BoxEnableCanTurn != NULL)
+	if (BoxEnableCanTurn != nullptr)
 		BoxEnableCanTurn->SetupAttachment(RootComponent);
 
-	if (ArrowDirecao != NULL)
+	if (ArrowDirecao != nullptr)
 		ArrowDirecao->SetupAttachment(RootComponent);
 	
 }
