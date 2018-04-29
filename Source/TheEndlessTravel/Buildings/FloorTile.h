@@ -46,6 +46,13 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* SpawnCoinArea;
 
+	UPROPERTY(EditAnywhere)
+	bool bCanSpawnObstacle;
+
+	UPROPERTY(EditAnywhere)
+	bool bCanSpawnCoin;
+
+
 	TSubclassOf<class AObstacleBase> ObstacleRock;
 
 	TSubclassOf<class APickupBase> PickupCoin;
@@ -56,6 +63,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TArray<FVector> SpawnPointsForPickUp;
 
+	
+
 	UPROPERTY(EditAnywhere)
 	int NumCoinsPerFloor; 
 
@@ -65,6 +74,7 @@ protected:
 	UPROPERTY(EditAnywhere)
 	class USceneComponent* FloorSceneComponent;
 
+	void DestroyAllActors();
 
 public:	
 	// Called every frame

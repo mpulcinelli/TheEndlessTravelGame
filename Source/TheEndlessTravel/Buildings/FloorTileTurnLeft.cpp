@@ -11,9 +11,6 @@
 // Sets default values
 AFloorTileTurnLeft::AFloorTileTurnLeft()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
 	BoxEnableCanTurn = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxEnableCanTurn"));
 	ArrowDirecao = CreateDefaultSubobject<UDecalComponent>(TEXT("ArrowDirecao"));
 
@@ -57,17 +54,6 @@ void AFloorTileTurnLeft::OnBoxEnableCanTurnBeginOverlap(UPrimitiveComponent* Ove
 
 	if (MyPlayer != nullptr)
 	{
-		PRINT_LOG("CAN TURN NOW!!!");
-
 		MyPlayer->CanTurn = true;
 	}
 }
-
-
-// Called every frame
-void AFloorTileTurnLeft::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-

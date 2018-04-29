@@ -19,7 +19,9 @@ AFloorTile::AFloorTile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	
+	bCanSpawnObstacle = true;
+	bCanSpawnCoin = true;
+
 	FloorSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("FloorSceneComponent"));
 	FloorMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FloorMeshComponent"));
 	WallLeftMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WallLeftMeshComponent"));
@@ -90,17 +92,33 @@ void AFloorTile::BeginPlay()
 	PositionForObstacle = GetSpawnPointsForObstacles();
 	SpawnPointsForPickUp = GetSpawnPointsForPickUp(); 
 
-	if (PositionForObstacle.Num() > 0)
+	
+	if (PositionForObstacle.Num() > 0 && bCanSpawnObstacle)
 	{
-		 SpawnObstacle(); 
-	} 
+		SpawnObstacle();
+	}
+	
 
-	if (SpawnPointsForPickUp.Num() > 0)
+
+	if (SpawnPointsForPickUp.Num() > 0 && bCanSpawnCoin)
 	{
 		 SpawnCoins();
 	}
 }
 
+
+void AFloorTile::DestroyAllActors()
+{
+	TArray<AActor*> ItemsToDestroy;
+
+	this->GetAttachedActors(ItemsToDestroy);
+
+	for (AActor* Actor : ItemsToDestroy)
+	{
+		PRINT_LOG_2("DESTRUINDO %s", *Actor->GetName());
+		Actor->Destroy();
+	}
+}
 
 void AFloorTile::OnBoxEndTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
@@ -119,6 +137,7 @@ void AFloorTile::OnBoxEndTriggerBeginOverlap(UPrimitiveComponent* OverlappedComp
 			if (GameModeNow != nullptr)
 			{
 				GameModeNow->AddFloorTile();
+				DestroyAllActors();
 				SetLifeSpan(2);
 			}
 		}
@@ -140,11 +159,8 @@ void AFloorTile::SpawnObstacle()
 			AObstacleBase* SpawnedObstacleRock = GameWorld->SpawnActor<AObstacleBase>((UClass*)ObstacleRock, PositionForObstacle[ItemRand], SpawnParams);
 			
 			if (!ensure(SpawnedObstacleRock != nullptr)) return;
-
-			if (SpawnedObstacleRock != nullptr)
-			{
-				SpawnedObstacleRock->SetLifeSpan(20.0f);
-			}
+			
+			SpawnedObstacleRock->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
 		}
 	}
 }
@@ -164,11 +180,8 @@ void AFloorTile::SpawnCoins()
 				APickupBase* SpawnedCoin = GameWorld->SpawnActor<APickupBase>((UClass*)PickupCoin, (FTransform)SpawnPointsForPickUp[i], SpawnParams);
 				
 				if (!ensure(SpawnedCoin != nullptr)) return;
-
-				if (SpawnedCoin != nullptr)
-				{
-					SpawnedCoin->SetLifeSpan(15.0f);
-				}
+				
+				SpawnedCoin->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
 			}
 		}
 	}

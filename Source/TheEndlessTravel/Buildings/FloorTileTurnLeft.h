@@ -32,9 +32,6 @@ protected:
 	class UDecalComponent* ArrowDirecao;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 	
 	virtual FTransform GetAttachTransform() override;
 

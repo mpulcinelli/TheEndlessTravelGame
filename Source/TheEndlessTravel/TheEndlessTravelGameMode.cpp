@@ -11,6 +11,7 @@
 #include <TimerManager.h>
 #include <Kismet/GameplayStatics.h>
 #include "GameHelpers/GameMacros.h"
+#include "Buildings/FloorTileTunnel.h"
 
 ATheEndlessTravelGameMode::ATheEndlessTravelGameMode()
 {
@@ -49,6 +50,12 @@ ATheEndlessTravelGameMode::ATheEndlessTravelGameMode()
 		FloorTileTurnLeft = BP_FloorTileTurnLeft.Class;
 	}
 
+	static ConstructorHelpers::FClassFinder<AFloorTileTunnel> BP_FloorTileTunnel(TEXT("/Game/Blueprints/BP_FloorTileTunnel"));
+	if (BP_FloorTileTunnel.Class != nullptr)
+	{
+		FloorTileTunnel = BP_FloorTileTunnel.Class;
+	}
+
 	static ConstructorHelpers::FObjectFinder<USoundBase> Cue_SoundBaseForCountDownIn(TEXT("/Game/Audio/count_down_Cue"));
 	if (Cue_SoundBaseForCountDownIn.Object != nullptr)
 	{
@@ -60,8 +67,6 @@ ATheEndlessTravelGameMode::ATheEndlessTravelGameMode()
 	{
 		SoundForRunningPlay = Cue_SoundBaseForRunningPlay.Object;
 	}
-
-
 
 	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/ThirdPersonCPP/Blueprints/RunnerCharacter"));
 	if (PlayerPawnBPClass.Class != nullptr)
@@ -85,24 +90,32 @@ ATheEndlessTravelGameMode::ATheEndlessTravelGameMode()
 
 void ATheEndlessTravelGameMode::AddFloorTile()
 {
-	int TurnMeTo = FMath::RandRange(1, 4);
+	int BuildingPeace = FMath::RandRange(1, 5);
 
 	if (CountForwardTile <= 5) {
 		this->SpawnForwardTile();
 	}
 	else{
 
-		if (TurnMeTo == 1){
+		if (BuildingPeace == 1){
 			this->SpawnTurnRightTile();
 		}
-		else if (TurnMeTo == 2){
+		else if (BuildingPeace == 2){
 			this->SpawnTurnLeftTile();
 		}
-		else if (TurnMeTo == 3) {
+		else if (BuildingPeace == 3) {
 			this->SpawnRampUpTile();
 		}
-		else if (TurnMeTo == 4) {
+		else if (BuildingPeace == 4) {
 			this->SpawnRampDownTile();
+		}
+		else if (BuildingPeace == 5) {
+			int TunnelSize = FMath::RandRange(1, 5);
+
+			for (int i=1;i<= TunnelSize;i++)
+			{
+				this->SpawnTunnelTile();
+			}
 		}
 		CountForwardTile = 0;
 	}
@@ -213,6 +226,28 @@ void ATheEndlessTravelGameMode::SpawnForwardTile()
 }
 
 
+
+void ATheEndlessTravelGameMode::SpawnTunnelTile()
+{
+	UWorld* const GameWorld = GetWorld();
+	FActorSpawnParameters SpawnParams;
+
+	if (FloorTile != nullptr)
+	{
+		if (GameWorld != nullptr)
+		{
+			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+			AFloorTileTunnel* SpawnedFloorTile = GameWorld->SpawnActor<AFloorTileTunnel>((UClass*)FloorTileTunnel, NextSpawnPoint, SpawnParams);
+
+			if (SpawnedFloorTile != nullptr)
+			{
+				NextSpawnPoint = SpawnedFloorTile->GetAttachTransform();
+			}
+		}
+	}
+
+}
 
 void ATheEndlessTravelGameMode::StartPlayerRunning()
 {

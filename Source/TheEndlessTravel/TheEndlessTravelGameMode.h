@@ -49,6 +49,8 @@ protected:
 
 	TSubclassOf<class AFloorTileTurnLeft> FloorTileTurnLeft;
 
+	TSubclassOf<class AFloorTileTunnel> FloorTileTunnel;
+
 	TSubclassOf<class USoundBase> SoundBaseForCountDownIn;
 
 	class ATheEndlessTravelCharacter* MyCharacter;
@@ -76,6 +78,8 @@ public:
 	void SpawnRampUpTile();
 
 	void SpawnForwardTile();
+
+	void SpawnTunnelTile();
 
 	void StartPlayerRunning();
 
