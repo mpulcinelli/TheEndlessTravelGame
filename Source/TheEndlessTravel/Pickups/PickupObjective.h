@@ -18,5 +18,8 @@ public:
 	
 protected:
 	
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray <class UStaticMesh*> ObjetoMesh;
+
+
 };
