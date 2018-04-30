@@ -76,10 +76,11 @@ protected:
 
 	void DestroyAllActors();
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	virtual void Destroyed() override;
 
+	//virtual void OnDestroyed(AActor* DestroyedActor) override;
+
+public:	
 	virtual FTransform GetAttachTransform();
 
 	TArray<FTransform> GetSpawnPointsForObstacles();
