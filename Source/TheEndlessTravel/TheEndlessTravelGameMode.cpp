@@ -313,9 +313,62 @@ void ATheEndlessTravelGameMode::CountMetersRun()
 	}
 }
 
+FString ATheEndlessTravelGameMode::GetLevelObjective()
+{
+	switch (CurrentLevel)
+	{
+	case 1:
+		return "RUNNER";
+	default:
+		return "";
+		break;
+	}
+}
+
+FString ATheEndlessTravelGameMode::GetLevelObjectiveCompleted()
+{
+	FString ConcatItems;
+	for (FString item : CollectedObjeciveItems)
+	{
+		ConcatItems.Append(item);
+	}
+
+	return ConcatItems;
+}
+
+void ATheEndlessTravelGameMode::SetObjectiveItem(FString letra)
+{
+	FString levelObjective = this->GetLevelObjective();
+	TArray<FString> Letters;
+	
+	for (int i =0; i<levelObjective.Len(); i++)
+	{
+		Letters.Add(levelObjective.Mid(i, 1));
+	}
+
+	if (CollectedObjeciveItems.Num() <= 0) {
+		for (int i = 0; i<Letters.Num(); i++)
+		{
+			CollectedObjeciveItems.Add(" ");
+		}
+	}
+
+	for (int i=0;i<Letters.Num();i++)
+	{
+		if (letra == Letters[i] && CollectedObjeciveItems[i] == " ")
+		{
+			CollectedObjeciveItems[i] = letra;
+			break;
+		}
+	}
+
+}
+
 void ATheEndlessTravelGameMode::BeginPlay()
 {
 	Super::BeginPlay();
+
+	CurrentLevel = 1;
 
 	MyCharacter = Cast<ATheEndlessTravelCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 

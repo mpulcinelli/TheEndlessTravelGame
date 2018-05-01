@@ -67,8 +67,14 @@ void UHUDControllers::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
 	float totalCoinCollectedByPlayer = TheEndlessTravelGameMode->GetTotalCoinCollectedByPlayer();
-	
+	FString levelObjectiveText = TheEndlessTravelGameMode->GetLevelObjective();
+	FString levelObjectiveCompletedText = TheEndlessTravelGameMode->GetLevelObjectiveCompleted();
+
 	CoinColletedText->SetText(FText::AsNumber(totalCoinCollectedByPlayer));
+
+	LevelObjectiveText->SetText(FText::AsCultureInvariant (levelObjectiveText));
+
+	LevelObjectiveCompletedText->SetText(FText::AsCultureInvariant(levelObjectiveCompletedText));
 
 }
 

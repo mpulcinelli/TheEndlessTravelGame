@@ -45,6 +45,12 @@ protected:
 	UPROPERTY(Meta = (BindWidget))
 	class UTextBlock* CountMetersRunText;
 
+	UPROPERTY(Meta = (BindWidget))
+	class UTextBlock* LevelObjectiveText;
+
+	UPROPERTY(Meta = (BindWidget))
+	class UTextBlock* LevelObjectiveCompletedText;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UWidgetAnimation* AnimationCountDownIn; 

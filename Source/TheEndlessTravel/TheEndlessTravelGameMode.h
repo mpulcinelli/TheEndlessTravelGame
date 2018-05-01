@@ -31,6 +31,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USoundBase* SoundForRunningPlay;
 	
+	int CurrentLevel;
 
 	int32 CountForwardTile;
 
@@ -62,11 +63,15 @@ protected:
 
 	float MetersIncremented;
 
+	TArray<FString> CollectedObjeciveItems;
+
 public:
 	ATheEndlessTravelGameMode();
 
 	int32 CountDownToStart;
 	
+
+
 	void AddFloorTile();
 
 	void SpawnTurnRightTile();
@@ -94,6 +99,14 @@ public:
 	void PlayAudioForRunningPlay();
 
 	void CountMetersRun();
+
+	FString GetLevelObjective();
+
+	FString GetLevelObjectiveCompleted();
+
+	void SetObjectiveItem(FString letra);
+
+	
 };
 
 
