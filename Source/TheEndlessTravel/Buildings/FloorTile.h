@@ -52,18 +52,25 @@ protected:
 	UPROPERTY(EditAnywhere)
 	bool bCanSpawnCoin;
 
+	UPROPERTY(EditAnywhere)
+	bool bCanSpawnObjectives;
 
 	TSubclassOf<class AObstacleBase> ObstacleRock;
 
 	TSubclassOf<class APickupBase> PickupCoin;
 
+	TSubclassOf<class APickupObjective> PickupObjective;
+
+
 	UPROPERTY(EditAnywhere)
 	TArray<FTransform> PositionForObstacle;
 
 	UPROPERTY(EditAnywhere)
-	TArray<FVector> SpawnPointsForPickUp;
+	TArray<FVector> SpawnPointsForCoins;
 
-	
+	UPROPERTY(EditAnywhere)
+	TArray<FVector> SpawnPointsForObjetives;
+
 
 	UPROPERTY(EditAnywhere)
 	int NumCoinsPerFloor; 
@@ -96,5 +103,7 @@ public:
 	UFUNCTION()
 	void SpawnCoins();
 
+	UFUNCTION()
+	void SpawnObjetives();
 
 };

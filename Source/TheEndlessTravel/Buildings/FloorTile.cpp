@@ -13,12 +13,14 @@
 #include "Pickups/PickupBase.h"
 #include <Engine/EngineTypes.h>
 #include "GameHelpers/GameMacros.h"
+#include "Pickups/PickupObjective.h"
 
 // Sets default values
 AFloorTile::AFloorTile()
 {
 	bCanSpawnObstacle = true;
 	bCanSpawnCoin = true;
+	bCanSpawnObjectives = true;
 
 	FloorSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("FloorSceneComponent"));
 	FloorMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("FloorMeshComponent"));
@@ -74,6 +76,13 @@ AFloorTile::AFloorTile()
 	{
 		PickupCoin = BP_PickupCoin.Class;
 	}
+
+	static ConstructorHelpers::FClassFinder<APickupObjective> BP_PickupObjective(TEXT("/Game/Blueprints/BP_PickupObjective"));
+	if (BP_PickupObjective.Class != nullptr)
+	{
+		PickupObjective = BP_PickupObjective.Class;
+	}
+
 }
 
 // Called when the game starts or when spawned
@@ -88,20 +97,24 @@ void AFloorTile::BeginPlay()
 	}
 
 	PositionForObstacle = GetSpawnPointsForObstacles();
-	SpawnPointsForPickUp = GetSpawnPointsForPickUp(); 
-
+	SpawnPointsForCoins = GetSpawnPointsForPickUp(); 
+	SpawnPointsForObjetives = GetSpawnPointsForPickUp();
 	
 	if (PositionForObstacle.Num() > 0 && bCanSpawnObstacle)
 	{
 		SpawnObstacle();
 	}
-	
 
-
-	if (SpawnPointsForPickUp.Num() > 0 && bCanSpawnCoin)
+	if (SpawnPointsForCoins.Num() > 0 && bCanSpawnCoin)
 	{
 		 SpawnCoins();
 	}
+
+	if (SpawnPointsForObjetives.Num() > 0 && bCanSpawnObjectives)
+	{
+		SpawnObjetives();
+	}
+
 }
 
 
@@ -181,7 +194,7 @@ void AFloorTile::SpawnCoins()
 			{
 				FActorSpawnParameters SpawnParams;
 				SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-				APickupBase* SpawnedCoin = GameWorld->SpawnActor<APickupBase>((UClass*)PickupCoin, (FTransform)SpawnPointsForPickUp[i], SpawnParams);
+				APickupBase* SpawnedCoin = GameWorld->SpawnActor<APickupBase>((UClass*)PickupCoin, (FTransform)SpawnPointsForCoins[i], SpawnParams);
 				
 				if (!ensure(SpawnedCoin != nullptr)) return;
 				
@@ -189,6 +202,33 @@ void AFloorTile::SpawnCoins()
 			}
 		}
 	}
+}
+
+void AFloorTile::SpawnObjetives()
+{
+	int Item = FMath::RandRange(1, 10);
+
+	if (Item != 5)return;
+
+	if (PickupObjective != nullptr)
+	{
+		UWorld* const GameWorld = GetWorld();
+
+		if (GameWorld != nullptr)
+		{
+			
+			int ItemPositionToSpawn = FMath::RandRange(0, SpawnPointsForObjetives.Num()-1);
+
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+			APickupObjective* SpawnedObjective = GameWorld->SpawnActor<APickupObjective>((UClass*)PickupObjective, (FTransform)SpawnPointsForObjetives[ItemPositionToSpawn], SpawnParams);
+
+			if (!ensure(PickupObjective != nullptr)) return;
+
+			SpawnedObjective->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
+		}
+	}
+
 }
 
 FTransform AFloorTile::GetAttachTransform()
