@@ -356,6 +356,10 @@ FString ATheEndlessTravelGameMode::GetLevelObjective()
 	{
 	case 1:
 		return "RUNNER";
+
+	case 2:
+		return "DEATH";
+		// TODO: Criar os meshs para todas as letras do alfabeto.
 	default:
 		return "";
 		break;
@@ -408,12 +412,10 @@ bool ATheEndlessTravelGameMode::IsObjectiveCompleted()
 	for (int i = 0; i < Letters.Num(); i++)
 	{
 		if (Letters[i] != CollectedObjeciveItems[i]) {
-			PRINT_LOG("IsObjectiveCompleted::::NÃO");
 			return false;
 		}
 	}
 
-	PRINT_LOG("IsObjectiveCompleted::::SIM");
 	return true;
 }
 

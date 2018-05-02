@@ -61,9 +61,9 @@ int UTheEndlessTravelGameInstance::GetFaseAtual()
 
 int UTheEndlessTravelGameInstance::CarregarProximaFase()
 {
-	int ProxFase = FaseAtual + 1;
-	this->IniciarFase(ProxFase);
-	return ProxFase;
+	FaseAtual++;
+	this->IniciarFase(FaseAtual);
+	return FaseAtual;
 }
 
 void UTheEndlessTravelGameInstance::IniciarFase(int id)

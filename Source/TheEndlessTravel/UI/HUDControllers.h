@@ -29,6 +29,8 @@ protected:
 
 	class ATheEndlessTravelGameMode* TheEndlessTravelGameMode;
 
+	class UTheEndlessTravelGameInstance* TheEndlessTravelGameInstance;
+
 	UPROPERTY(Meta = (BindWidget))
 	class UButton* JumpButton;
 
@@ -45,20 +47,14 @@ protected:
 	UPROPERTY(Meta = (BindWidget))
 	class UTextBlock* CountMetersRunText;
 
-/*	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (BindWidget))
+	UPROPERTY(Meta = (BindWidget))
+	class UTextBlock* CurrentLevelText;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UTextBlock* LevelObjectiveText;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (BindWidget))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UTextBlock* LevelObjectiveCompletedText;
-	*/
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		class UTextBlock* LevelObjectiveText;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		class UTextBlock* LevelObjectiveCompletedText;
-
-
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UWidgetAnimation* AnimationCountDownIn; 

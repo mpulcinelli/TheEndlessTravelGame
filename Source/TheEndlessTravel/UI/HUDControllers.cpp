@@ -6,6 +6,7 @@
 #include <Kismet/GameplayStatics.h>
 #include "TheEndlessTravelGameMode.h"
 #include "GameHelpers/GameMacros.h"
+#include "TheEndlessTravelGameInstance.h"
 
 bool UHUDControllers::Initialize()
 {
@@ -14,6 +15,11 @@ bool UHUDControllers::Initialize()
 
 	TheEndlessTravelCharacte = Cast<ATheEndlessTravelCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if (!ensure(TheEndlessTravelCharacte != nullptr)) return false;
+
+	TheEndlessTravelGameInstance = Cast<UTheEndlessTravelGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+
+	
+	if (!ensure(TheEndlessTravelGameInstance != nullptr)) return false;
 
 	if (!ensure(JumpButton != nullptr)) return false; 
 	
@@ -77,6 +83,11 @@ void UHUDControllers::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 
 	if(LevelObjectiveCompletedText!=nullptr)
 		LevelObjectiveCompletedText->SetText(FText::AsCultureInvariant(levelObjectiveCompletedText));
+
+	int CurLevel = TheEndlessTravelGameInstance->GetFaseAtual();
+
+	if (CurrentLevelText != nullptr)
+		CurrentLevelText->SetText(FText::AsNumber(CurLevel));
 
 }
 
