@@ -5,6 +5,7 @@
 #include "Blueprint/UserWidget.h"
 #include "UI/HomeMenu.h"
 #include "UI/HUDControllers.h"
+#include <Kismet/GameplayStatics.h>
 
 
 
@@ -27,6 +28,7 @@ UTheEndlessTravelGameInstance::UTheEndlessTravelGameInstance(const FObjectInitia
 
 void UTheEndlessTravelGameInstance::Init()
 {
+	FaseAtual = 1;
 }
 
 void UTheEndlessTravelGameInstance::LoadHUDController()
@@ -50,4 +52,39 @@ void UTheEndlessTravelGameInstance::LoadHomeMenu()
 	if (!ensure(HomeMenu != nullptr)) return;
 
 	HomeMenu->Setup();
+}
+
+int UTheEndlessTravelGameInstance::GetFaseAtual()
+{
+	return FaseAtual;
+}
+
+int UTheEndlessTravelGameInstance::CarregarProximaFase()
+{
+	int ProxFase = FaseAtual + 1;
+	this->IniciarFase(ProxFase);
+	return ProxFase;
+}
+
+void UTheEndlessTravelGameInstance::IniciarFase(int id)
+{
+
+	switch (id)
+	{
+	case 1:
+		UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Maps/Map_01"), TRAVEL_Absolute);
+		break;
+
+	case 2:
+		UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Maps/Map_02"), TRAVEL_Absolute);
+		break;
+	default:
+		break;
+	}
+
+}
+
+void UTheEndlessTravelGameInstance::Terminar()
+{
+	GetWorld()->GetFirstPlayerController()->ConsoleCommand("quit");
 }

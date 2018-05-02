@@ -72,9 +72,11 @@ void UHUDControllers::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 
 	CoinColletedText->SetText(FText::AsNumber(totalCoinCollectedByPlayer));
 
-	LevelObjectiveText->SetText(FText::AsCultureInvariant (levelObjectiveText));
+	if(LevelObjectiveText!=nullptr)
+		LevelObjectiveText->SetText(FText::AsCultureInvariant (levelObjectiveText));
 
-	LevelObjectiveCompletedText->SetText(FText::AsCultureInvariant(levelObjectiveCompletedText));
+	if(LevelObjectiveCompletedText!=nullptr)
+		LevelObjectiveCompletedText->SetText(FText::AsCultureInvariant(levelObjectiveCompletedText));
 
 }
 

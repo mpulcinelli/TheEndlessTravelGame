@@ -6,6 +6,7 @@
 #include "TheEndlessTravelCharacter.h"
 #include <Components/DecalComponent.h>
 #include "GameHelpers/GameMacros.h"
+#include <Components/StaticMeshComponent.h>
 
 
 // Sets default values
@@ -13,6 +14,8 @@ AFloorTileTurnLeft::AFloorTileTurnLeft()
 {
 	BoxEnableCanTurn = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxEnableCanTurn"));
 	ArrowDirecao = CreateDefaultSubobject<UDecalComponent>(TEXT("ArrowDirecao"));
+	PlaneDirection=CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlaneDirection"));
+
 
 	if (BoxEnableCanTurn != nullptr)
 		BoxEnableCanTurn->SetupAttachment(RootComponent);
@@ -20,6 +23,9 @@ AFloorTileTurnLeft::AFloorTileTurnLeft()
 	if (ArrowDirecao != nullptr)
 		ArrowDirecao->SetupAttachment(RootComponent);
 	
+	if (PlaneDirection != nullptr)
+		PlaneDirection->SetupAttachment(RootComponent);
+
 }
 
 // Called when the game starts or when spawned

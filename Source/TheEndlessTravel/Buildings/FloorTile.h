@@ -17,7 +17,9 @@ public:
 	AFloorTile();
 
 protected:
-
+	class UMaterial* FloorMaterial;
+	
+	class UMaterial* WallsMaterial;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

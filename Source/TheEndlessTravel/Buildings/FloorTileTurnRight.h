@@ -28,6 +28,8 @@ protected:
 	UFUNCTION()
 	virtual void OnBoxEndTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult) override;
 
+	UPROPERTY(VisibleAnywhere)
+	class UStaticMeshComponent* PlaneDirection;
 
 public:
 	AFloorTileTurnRight();

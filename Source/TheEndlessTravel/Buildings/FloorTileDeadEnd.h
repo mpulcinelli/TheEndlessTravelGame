@@ -22,6 +22,13 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* WallEndMeshComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class UParticleSystemComponent* PortalParticleEffectComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	class UParticleSystem* PortalParticleEffect;
+
+
 	UFUNCTION()
 	virtual void OnBoxEndTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult) override;
 

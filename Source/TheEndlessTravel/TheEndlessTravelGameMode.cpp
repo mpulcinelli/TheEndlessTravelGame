@@ -12,6 +12,8 @@
 #include <Kismet/GameplayStatics.h>
 #include "GameHelpers/GameMacros.h"
 #include "Buildings/FloorTileTunnel.h"
+#include "TheEndlessTravelGameInstance.h"
+#include "Buildings/FloorTileDeadEnd.h"
 
 ATheEndlessTravelGameMode::ATheEndlessTravelGameMode()
 {
@@ -19,6 +21,7 @@ ATheEndlessTravelGameMode::ATheEndlessTravelGameMode()
 	CountDownToStart = 5;
 	CoinCollected = 0.0f;
 	MetersIncremented = 0.0f;
+	LastItemCreated = false;
 
 	static ConstructorHelpers::FClassFinder<AFloorTile> BP_FloorTile(TEXT("/Game/Blueprints/BP_FloorTile"));
 	if (BP_FloorTile.Class != nullptr)
@@ -56,6 +59,13 @@ ATheEndlessTravelGameMode::ATheEndlessTravelGameMode()
 		FloorTileTunnel = BP_FloorTileTunnel.Class;
 	}
 
+	static ConstructorHelpers::FClassFinder<AFloorTileDeadEnd> BP_FloorTileDeadEnd(TEXT("/Game/Blueprints/BP_FloorTileDeadEnd"));
+	if (BP_FloorTileDeadEnd.Class != nullptr)
+	{
+		FloorTileDeadEnd = BP_FloorTileDeadEnd.Class;
+	}
+
+
 	static ConstructorHelpers::FObjectFinder<USoundBase> Cue_SoundBaseForCountDownIn(TEXT("/Game/Audio/count_down_Cue"));
 	if (Cue_SoundBaseForCountDownIn.Object != nullptr)
 	{
@@ -90,37 +100,47 @@ ATheEndlessTravelGameMode::ATheEndlessTravelGameMode()
 
 void ATheEndlessTravelGameMode::AddFloorTile()
 {
-	int BuildingPeace = FMath::RandRange(1, 5);
+	if (LastItemCreated)return;
 
-	if (CountForwardTile <= 5) {
-		this->SpawnForwardTile();
+	if (this->IsObjectiveCompleted())
+	{
+		LastItemCreated = true;
+		this->SpawnDeadEndTile();
 	}
-	else{
+	else 
+	{
+		int BuildingItem = FMath::RandRange(1, 5);
 
-		if (BuildingPeace == 1){
-			this->SpawnTurnRightTile();
+		if (CountForwardTile <= 5) {
+			this->SpawnForwardTile();
 		}
-		else if (BuildingPeace == 2){
-			this->SpawnTurnLeftTile();
-		}
-		else if (BuildingPeace == 3) {
-			this->SpawnRampUpTile();
-		}
-		else if (BuildingPeace == 4) {
-			this->SpawnRampDownTile();
-		}
-		else if (BuildingPeace == 5) {
-			int TunnelSize = FMath::RandRange(1, 5);
+		else {
 
-			for (int i=1;i<= TunnelSize;i++)
-			{
-				this->SpawnTunnelTile();
+			if (BuildingItem == 1) {
+				this->SpawnTurnRightTile();
 			}
-		}
-		CountForwardTile = 0;
-	}
+			else if (BuildingItem == 2) {
+				this->SpawnTurnLeftTile();
+			}
+			else if (BuildingItem == 3) {
+				this->SpawnRampUpTile();
+			}
+			else if (BuildingItem == 4) {
+				this->SpawnRampDownTile();
+			}
+			else if (BuildingItem == 5) {
+				int TunnelSize = FMath::RandRange(1, 5);
 
-	CountForwardTile++;
+				for (int i = 1; i <= TunnelSize; i++)
+				{
+					this->SpawnTunnelTile();
+				}
+			}
+			CountForwardTile = 0;
+		}
+
+		CountForwardTile++;
+	}
 }
 
 void ATheEndlessTravelGameMode::SpawnTurnRightTile()
@@ -225,6 +245,26 @@ void ATheEndlessTravelGameMode::SpawnForwardTile()
 	}
 }
 
+void ATheEndlessTravelGameMode::SpawnDeadEndTile()
+{
+	UWorld* const GameWorld = GetWorld();
+	FActorSpawnParameters SpawnParams;
+
+	if (FloorTileDeadEnd != nullptr)
+	{
+		if (GameWorld != nullptr)
+		{
+			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+			AFloorTile* SpawnedFloorTileDeadEnd = GameWorld->SpawnActor<AFloorTile>((UClass*)FloorTileDeadEnd, NextSpawnPoint, SpawnParams);
+
+			if (SpawnedFloorTileDeadEnd != nullptr)
+			{
+				NextSpawnPoint = SpawnedFloorTileDeadEnd->GetAttachTransform();
+			}
+		}
+	}
+}
 
 
 void ATheEndlessTravelGameMode::SpawnTunnelTile()
@@ -290,9 +330,6 @@ void ATheEndlessTravelGameMode::RestartDeadPlayers()
 	}
 }
 
-
-
-
 void ATheEndlessTravelGameMode::PlayAudioForCountDown()
 {
 	UGameplayStatics::PlaySound2D(GetWorld(), SoundForCountDownIn);
@@ -339,11 +376,12 @@ FString ATheEndlessTravelGameMode::GetLevelObjectiveCompleted()
 void ATheEndlessTravelGameMode::SetObjectiveItem(FString letra)
 {
 	FString levelObjective = this->GetLevelObjective();
-	TArray<FString> Letters;
-	
-	for (int i =0; i<levelObjective.Len(); i++)
-	{
-		Letters.Add(levelObjective.Mid(i, 1));
+
+	if (Letters.Num() <= 0) {
+		for (int i = 0; i < levelObjective.Len(); i++)
+		{
+			Letters.Add(levelObjective.Mid(i, 1));
+		}
 	}
 
 	if (CollectedObjeciveItems.Num() <= 0) {
@@ -361,18 +399,39 @@ void ATheEndlessTravelGameMode::SetObjectiveItem(FString letra)
 			break;
 		}
 	}
+}
 
+bool ATheEndlessTravelGameMode::IsObjectiveCompleted()
+{
+	if (Letters.Num() <= 0)return false;
+
+	for (int i = 0; i < Letters.Num(); i++)
+	{
+		if (Letters[i] != CollectedObjeciveItems[i]) {
+			PRINT_LOG("IsObjectiveCompleted::::NÃO");
+			return false;
+		}
+	}
+
+	PRINT_LOG("IsObjectiveCompleted::::SIM");
+	return true;
 }
 
 void ATheEndlessTravelGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CurrentLevel = 1;
-
 	MyCharacter = Cast<ATheEndlessTravelCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
+	TheEndlessGameInstance = Cast<UTheEndlessTravelGameInstance>(GetGameInstance());
+
+	if (TheEndlessGameInstance != nullptr)
+		CurrentLevel = TheEndlessGameInstance->GetFaseAtual();
+	else
+		CurrentLevel = 1;
+
 	GetWorldTimerManager().SetTimer(TimerHandle_StartPlaying, this, &ATheEndlessTravelGameMode::StartPlayerRunning, 1, true);
+	
 	for (int i =0 ;i<10;i++)
 	{
 		this->AddFloorTile();

@@ -45,11 +45,19 @@ protected:
 	UPROPERTY(Meta = (BindWidget))
 	class UTextBlock* CountMetersRunText;
 
-	UPROPERTY(Meta = (BindWidget))
+/*	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (BindWidget))
 	class UTextBlock* LevelObjectiveText;
 
-	UPROPERTY(Meta = (BindWidget))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Meta = (BindWidget))
 	class UTextBlock* LevelObjectiveCompletedText;
+	*/
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		class UTextBlock* LevelObjectiveText;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		class UTextBlock* LevelObjectiveCompletedText;
+
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

@@ -24,6 +24,14 @@ public:
 		UFUNCTION(BlueprintCallable)
 		void LoadHomeMenu();
 
+		int GetFaseAtual();
+
+		int CarregarProximaFase();
+
+		void IniciarFase(int id);
+
+		void Terminar();
+
 private:
 	TSubclassOf<class UUserWidget> ClassHudController;
 
@@ -33,6 +41,6 @@ private:
 
 	class UHomeMenu* HomeMenu;
 
-
+	int FaseAtual;
 
 };

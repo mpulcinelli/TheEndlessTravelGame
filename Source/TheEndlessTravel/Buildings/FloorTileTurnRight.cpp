@@ -6,16 +6,23 @@
 #include <Components/BoxComponent.h>
 #include "TheEndlessTravelCharacter.h"
 #include "Components/DecalComponent.h"
+#include <Components/StaticMeshComponent.h>
 
 AFloorTileTurnRight::AFloorTileTurnRight()
 {
 	BoxEnableCanTurn = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxEnableCanTurn"));
 	ArrowDirecao = CreateDefaultSubobject<UDecalComponent>(TEXT("ArrowDirecao"));
+	PlaneDirection = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlaneDirection"));
+
 	if(BoxEnableCanTurn!=nullptr)
 		BoxEnableCanTurn->SetupAttachment(RootComponent);
 
 	if(ArrowDirecao!=nullptr)
 		ArrowDirecao->SetupAttachment(RootComponent);
+
+	if (PlaneDirection != nullptr)
+		PlaneDirection->SetupAttachment(RootComponent);
+
 }
 
 void AFloorTileTurnRight::BeginPlay()

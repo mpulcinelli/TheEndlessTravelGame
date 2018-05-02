@@ -14,6 +14,7 @@
 #include <Engine/EngineTypes.h>
 #include "GameHelpers/GameMacros.h"
 #include "Pickups/PickupObjective.h"
+#include <Materials/Material.h>
 
 // Sets default values
 AFloorTile::AFloorTile()
@@ -83,12 +84,35 @@ AFloorTile::AFloorTile()
 		PickupObjective = BP_PickupObjective.Class;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UMaterial> MAT_FloorMaterial(TEXT("/Game/Materials/Buildings/1/Floor/Plate_Aluminium_MAT"));
+	if (MAT_FloorMaterial.Succeeded())
+	{
+		FloorMaterial = MAT_FloorMaterial.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UMaterial> MAT_WallsMaterial(TEXT("/Game/Materials/Buildings/1/Walls/Aluminium_Foil_MAT"));
+	if (MAT_WallsMaterial.Succeeded())
+	{
+		WallsMaterial = MAT_WallsMaterial.Object;
+	}
+
+
 }
 
 // Called when the game starts or when spawned
 void AFloorTile::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if(FloorMaterial!=nullptr)
+		FloorMeshComponent->SetMaterial(0, FloorMaterial);
+
+	if (WallsMaterial != nullptr) {
+		WallLeftMeshComponent->SetMaterial(0, WallsMaterial);
+		WallRightMeshComponent->SetMaterial(0, WallsMaterial);
+	}
+		
+
 
 	if (BoxEndTrigger != nullptr)
 	{

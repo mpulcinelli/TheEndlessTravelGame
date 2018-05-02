@@ -2,6 +2,7 @@
 
 #include "HomeMenu.h"
 #include <Kismet/GameplayStatics.h>
+#include "TheEndlessTravelGameInstance.h"
 
 bool UHomeMenu::Initialize()
 {
@@ -48,10 +49,15 @@ void UHomeMenu::Setup()
 
 void UHomeMenu::OnJogar()
 {
-	UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/Maps/Map_01"), TRAVEL_Absolute);
+	UTheEndlessTravelGameInstance* MyGM = Cast<UTheEndlessTravelGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (MyGM != nullptr)
+		MyGM->IniciarFase(1);
+
 }
 
 void UHomeMenu::OnSair()
 {
-	GetWorld()->GetFirstPlayerController()->ConsoleCommand("quit");
+	UTheEndlessTravelGameInstance* MyGM = Cast<UTheEndlessTravelGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (MyGM != nullptr)
+		MyGM->Terminar();
 }

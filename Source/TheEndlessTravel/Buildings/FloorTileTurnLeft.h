@@ -31,6 +31,9 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	class UDecalComponent* ArrowDirecao;
 
+	UPROPERTY(VisibleAnywhere)
+	class UStaticMeshComponent* PlaneDirection;
+
 public:	
 	
 	virtual FTransform GetAttachTransform() override;

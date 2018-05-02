@@ -32,6 +32,8 @@ protected:
 	class USoundBase* SoundForRunningPlay;
 	
 	int CurrentLevel;
+	
+	bool LastItemCreated;
 
 	int32 CountForwardTile;
 
@@ -52,6 +54,8 @@ protected:
 
 	TSubclassOf<class AFloorTileTunnel> FloorTileTunnel;
 
+	TSubclassOf<class AFloorTileDeadEnd> FloorTileDeadEnd;
+
 	TSubclassOf<class USoundBase> SoundBaseForCountDownIn;
 
 	class ATheEndlessTravelCharacter* MyCharacter;
@@ -64,6 +68,10 @@ protected:
 	float MetersIncremented;
 
 	TArray<FString> CollectedObjeciveItems;
+
+	class UTheEndlessTravelGameInstance* TheEndlessGameInstance;
+	
+	TArray<FString> Letters;
 
 public:
 	ATheEndlessTravelGameMode();
@@ -85,6 +93,8 @@ public:
 	void SpawnForwardTile();
 
 	void SpawnTunnelTile();
+	
+	void SpawnDeadEndTile();
 
 	void StartPlayerRunning();
 
@@ -106,7 +116,7 @@ public:
 
 	void SetObjectiveItem(FString letra);
 
-	
+	bool IsObjectiveCompleted();
 };
 
 
