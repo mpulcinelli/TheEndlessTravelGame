@@ -15,5 +15,4 @@ AHomeMenuGameMode::AHomeMenuGameMode()
 	{
 		PlayerControllerClass = PlayerControllerBPClass.Class;
 	}
-	PRINT_LOG("AHomeMenuGameMode");
 } 
