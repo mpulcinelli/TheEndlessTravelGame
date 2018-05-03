@@ -16,8 +16,11 @@ class THEENDLESSTRAVEL_API UTheEndlessTravelGameInstance : public UGameInstance
 
 public:
 		UTheEndlessTravelGameInstance(const FObjectInitializer & ObjectInitializer);
+		
+		class UTheEndlessTravelSaveGame* SaveGameInstance;
+
 		virtual void Init();
-	
+		
 		UFUNCTION(BlueprintCallable)
 		void LoadHUDController();
 
@@ -31,6 +34,10 @@ public:
 		void IniciarFase(int id);
 
 		void Terminar();
+
+		bool SavePlayerName(FString PlayerName);
+
+		bool SaveCurrentFase(int Id);
 
 private:
 	TSubclassOf<class UUserWidget> ClassHudController;

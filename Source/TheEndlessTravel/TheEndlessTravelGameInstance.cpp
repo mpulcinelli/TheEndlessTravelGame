@@ -1,11 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include <Kismet/GameplayStatics.h>
 #include "TheEndlessTravelGameInstance.h"
+#include "Basics/TheEndlessTravelSaveGame.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Blueprint/UserWidget.h"
 #include "UI/HomeMenu.h"
 #include "UI/HUDControllers.h"
-#include <Kismet/GameplayStatics.h>
+
+#include "GameHelpers/GameMacros.h"
 
 
 
@@ -23,12 +26,25 @@ UTheEndlessTravelGameInstance::UTheEndlessTravelGameInstance(const FObjectInitia
 
 	ClassHomeMenu = WBP_HomeMenu.Class;
 
+	SaveGameInstance = Cast<UTheEndlessTravelSaveGame>(UGameplayStatics::CreateSaveGameObject(UTheEndlessTravelSaveGame::StaticClass()));
+
 
 }
 
 void UTheEndlessTravelGameInstance::Init()
 {
-	FaseAtual = 1;
+	SaveGameInstance = Cast<UTheEndlessTravelSaveGame>(UGameplayStatics::LoadGameFromSlot(SaveGameInstance->SaveSlotName, SaveGameInstance->UserIndex));
+	
+	if (SaveGameInstance != nullptr) {
+		FaseAtual = SaveGameInstance->CurrentFase;
+	}
+	else
+	{
+		FaseAtual = 1;
+	}
+	
+	PRINT_TO_SCREEN(FString::FromInt(FaseAtual));
+
 }
 
 void UTheEndlessTravelGameInstance::LoadHUDController()
@@ -81,10 +97,31 @@ void UTheEndlessTravelGameInstance::IniciarFase(int id)
 	default:
 		break;
 	}
-
 }
 
 void UTheEndlessTravelGameInstance::Terminar()
 {
 	GetWorld()->GetFirstPlayerController()->ConsoleCommand("quit");
+}
+
+bool UTheEndlessTravelGameInstance::SavePlayerName(FString MyPlayerName)
+{
+	if (SaveGameInstance != nullptr) {
+		SaveGameInstance->PlayerName = MyPlayerName;
+		UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->SaveSlotName, SaveGameInstance->UserIndex);
+		return true;
+	}
+
+	return false;
+}
+
+bool UTheEndlessTravelGameInstance::SaveCurrentFase(int Id)
+{
+	if (SaveGameInstance != nullptr) {
+		SaveGameInstance->CurrentFase = Id;
+		UGameplayStatics::SaveGameToSlot(SaveGameInstance, SaveGameInstance->SaveSlotName, SaveGameInstance->UserIndex);
+		return true;
+	}
+
+	return false;
 }
