@@ -359,7 +359,7 @@ FString ATheEndlessTravelGameMode::GetLevelObjective()
 
 	case 2:
 		return "DEATH";
-		// TODO: Criar os meshs para todas as letras do alfabeto.
+
 	default:
 		return "";
 		break;
