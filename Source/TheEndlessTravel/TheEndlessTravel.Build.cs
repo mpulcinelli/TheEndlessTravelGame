@@ -11,6 +11,14 @@ public class TheEndlessTravel : ModuleRules
         bEnforceIWYU = false;
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
         
-        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "PhysX", "APEX", "ApexDestruction" });
+        PublicDependencyModuleNames.AddRange(new string[] { "Core",
+                                                            "CoreUObject",
+                                                            "Engine",
+                                                            "InputCore",
+                                                            "HeadMountedDisplay",
+                                                            "PhysX",
+                                                            "APEX",
+                                                            "ApexDestruction",
+                                                            "AIModule" });
     }
 }

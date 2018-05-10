@@ -18,6 +18,8 @@
 #include "TheEndlessTravelGameMode.h"
 #include "GameHelpers/GameMacros.h"
 #include "Weapons/WeaponBase.h"
+#include <Perception/AIPerceptionStimuliSourceComponent.h>
+#include <Perception/AISense_Sight.h>
 //////////////////////////////////////////////////////////////////////////
 // ATheEndlessTravelCharacter
 
@@ -63,13 +65,18 @@ ATheEndlessTravelCharacter::ATheEndlessTravelCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-	TheEndlessTravelGameMode = Cast<ATheEndlessTravelGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	AIPerceptionStimuliSourceComponent = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("PerceptionStimuliSourceComponent"));
+	AIPerceptionStimuliSourceComponent->RegisterForSense(UAISense_Sight::StaticClass());
+	AIPerceptionStimuliSourceComponent->RegisterWithPerceptionSystem();
 
+	TheEndlessTravelGameMode = Cast<ATheEndlessTravelGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+	//https://denisrizov.com/2017/05/08/ai-perception-in-unreal-engine-4-how-to-setup/
 }
 
 void ATheEndlessTravelCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
 	FActorSpawnParameters SpawnParameters;
 	SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 	

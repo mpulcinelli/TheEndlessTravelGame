@@ -94,8 +94,6 @@ ATheEndlessTravelGameMode::ATheEndlessTravelGameMode()
 	{
 		PlayerControllerClass = PlayerControllerBPClass.Class;
 	}
-
-
 }
 
 void ATheEndlessTravelGameMode::AddFloorTile()

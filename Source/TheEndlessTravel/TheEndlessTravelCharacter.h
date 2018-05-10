@@ -42,6 +42,10 @@ protected:
 
 	class ATheEndlessTravelGameMode* TheEndlessTravelGameMode;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	class UAIPerceptionStimuliSourceComponent* AIPerceptionStimuliSourceComponent;
+
+
 	class AWeaponBase* CurrentWeapon;
 
 	UPROPERTY(EditDefaultsOnly)
